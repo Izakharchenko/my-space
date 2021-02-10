@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\{ User, Role };
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -14,9 +15,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $id = 1;
+    //     $adminRole = Role::where('name', 'admin')->first();
+    //     $admin = User::create([
+    //         'name' => 'Ivan',
+    //         'email' => 'ivan@gmail.com',
+    //         'password' => Hash::make('password'),
+    //     ]);
+    //     $admin->roles()->attach($adminRole);
+    //     $admin->save();
+
+        $users = User::all();
+        //var_dump($adminRole).die();
         return view('admin.user.index', [
-            'user' => User::findOrFail($id)
+            'users' => $users
         ]);
     }
 

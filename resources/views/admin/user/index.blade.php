@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('User') }}
+            {{ __('Users') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <!-- This example requires Tailwind CSS v2.0+ -->
+                <!-- This example requires Tailwind CSS v2.0+ -->
                 <div class="flex flex-col">
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -29,11 +29,13 @@
                                 Role
                             </th>
                             <th scope="col" class="relative px-6 py-3">
-                                <span class="sr-only">Edit</span>
+                                <span class="sr-only">Actions</span>
+                                Actions
                             </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach ($users as $user)
                             <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
@@ -42,10 +44,10 @@
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900">
-                                    Jane Cooper
+                                    {{ $user->name }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                    jane.cooper@example.com
+                                    {{ $user->email }}
                                     </div>
                                 </div>
                                 </div>
@@ -60,13 +62,18 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                Admin
+                                {{-- $user->role->name --}}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <a href="{{ route('admin.user.show', $user) }}"
+                                    class="text-indigo-600 hover:text-indigo-900">Viwe</a>
+                                <a href="{{ route('admin.user.edit', $user) }}"
+                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <a href="{{ route('admin.user.destroy', $user) }}"
+                                    class="text-indigo-600 hover:text-indigo-900">Delete</a>
                             </td>
                             </tr>
-
+                        @endforeach
                             <!-- More items... -->
                         </tbody>
                         </table>
