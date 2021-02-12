@@ -1,13 +1,14 @@
-<x-app-layout>
+@extends('layouts.app')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Users') }}
         </h2>
     </x-slot>
-
+ <a href="{{ route('admin.user.create') }}">Create user</a>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+
                 <!-- This example requires Tailwind CSS v2.0+ -->
                 <div class="flex flex-col">
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -28,8 +29,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Role
                             </th>
-                            <th scope="col" class="relative px-6 py-3">
-                                <span class="sr-only">Actions</span>
+                            <th scope="col" class="relative px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
                             </tr>
@@ -66,7 +66,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="{{ route('admin.user.show', $user) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">Viwe</a>
+                                    class="text-indigo-600 hover:text-indigo-900">View</a>
                                 <a href="{{ route('admin.user.edit', $user) }}"
                                     class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 <a href="{{ route('admin.user.destroy', $user) }}"
