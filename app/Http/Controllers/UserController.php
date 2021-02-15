@@ -15,14 +15,16 @@ class UserController extends Controller
      */
     public function index()
     {
-    //     $adminRole = Role::where('name', 'admin')->first();
-    //     $admin = User::create([
-    //         'name' => 'Ivan',
-    //         'email' => 'ivan@gmail.com',
-    //         'password' => Hash::make('password'),
-    //     ]);
-    //     $admin->roles()->attach($adminRole);
-    //     $admin->save();
+        // for ($i = 0; $i < 10; $i++) {
+        // $adminRole = Role::where('name', 'author')->first();
+        // $admin = User::create([
+        //     'name' => "Ivan${i}",
+        //     'email' => "author112${i}@gmail.com",
+        //     'password' => Hash::make('password'),
+        // ]);
+        // $admin->roles()->attach($adminRole);
+        // $admin->save();
+        // }
 
         $users = User::all();
         //var_dump($adminRole).die();
@@ -71,7 +73,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $roles = Role::all();
+        return view('admin.user.edit')->with([
+            'user' => User::findOrFail($id),
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -83,17 +89,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->roles()->sync($request->roles);
+
+        return redirect()->route('admin.user.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->roles()->detach();
+        $user->delete();
+
+        // return redirect()->route('admin.user.index');
+        return response('OK', 200);
     }
 }
