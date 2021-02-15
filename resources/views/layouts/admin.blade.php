@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @stack('scripts')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +19,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -33,7 +35,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item{{ request()->is('dashboard') ? ' active' : null }}">
+                            <a class="nav-link"
+                                href="{{ route('dashboard') }}">Home <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item{{ request()->is('admin.user.*') ? ' active' : null }}">
+                            <a class="nav-link" href="{{ route('admin.user.index') }}">Users</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -79,5 +88,6 @@
             @yield('content')
         </main>
     </div>
+    @stack('scripts-footer')
 </body>
 </html>
