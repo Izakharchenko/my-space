@@ -1,87 +1,72 @@
-@extends('layouts.app')
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Users') }}
-        </h2>
-    </x-slot>
- <a href="{{ route('admin.user.create') }}">Create user</a>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-
-                <!-- This example requires Tailwind CSS v2.0+ -->
-                <div class="flex flex-col">
-                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Title
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Role
-                            </th>
-                            <th scope="col" class="relative px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($users as $user)
-                            <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">
-                                    {{ $user->name }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">
-                                    {{ $user->email }}
-                                    </div>
-                                </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                <div class="text-sm text-gray-500">Optimization</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Active
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{-- $user->role->name --}}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('admin.user.show', $user) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">View</a>
-                                <a href="{{ route('admin.user.edit', $user) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                <a href="{{ route('admin.user.destroy', $user) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">Delete</a>
-                            </td>
-                            </tr>
-                        @endforeach
-                            <!-- More items... -->
-                        </tbody>
-                        </table>
-                    </div>
-                    </div>
-                </div>
-                </div>
+@extends('layouts.admin')
+@section('content')
+<div class="container">
+    <div class="title">
+        <h1 class="display">{{ __('Users') }}</h1>
+    </div>
+</div>
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-sm">
+                <a href="{{ route('admin.user.create') }}" class="btn btn-success">Create user</a>
             </div>
         </div>
-    </div>
-</x-app-layout>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Role</th>
+                <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($users as $user)
+                <tr>
+                <th>{{ $loop->iteration }}</th>
+                <td>
+                    <img class="img-thumbnail-table" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
+                    <div>
+                        <div class="text-right">{{ $user->name }}</div>
+                    </div>
+                </td>
+                <td>
+                    <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                </td>
+                <td>
+                    <span class="badge badge-success">
+                    Active
+                    </span>
+                </td>
+                <td >
+                    {{ implode(', ', $user->roles()->get()->pluck('name')->toArray() ) }}
+                </td>
+                    <td>
+                        <a class="btn btn-link" href="{{ route('admin.user.show', $user) }}">View</a>
+                        <a class="btn btn-link" href="{{ route('admin.user.edit', $user) }}">Edit</a>
+                        {{-- <form action="{{ route('admin.user.destroy', $user) }}"
+                            method="post">
+                            @csrf
+                            @method('DELETE') --}}
+                        <button onclick="onDelete({{ $user->id }})" class="btn btn-link on-delete">Delete</button>
+                        {{-- </form> --}}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+            </table>
+            {{-- <button type="submit" class="btn btn-link on-delete1">Delete</button> --}}
+        </div>
+@endsection
+
+@push('styles')
+    <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
+@endpush
+@push('scripts')
+    <script src="{{asset('js/sweetalert2.min.js') }}" defer></script>
+@endpush
+@push('scripts-footer')
+    <script src="{{asset('js/on-delete.js') }}" defer></script>
+@endpush
