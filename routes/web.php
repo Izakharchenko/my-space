@@ -21,13 +21,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::name('admin.')->middleware(['auth'])->group(function () {
-    Route::resource('user', UserController::class);
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
 });
 
 
 require __DIR__.'/auth.php';
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
