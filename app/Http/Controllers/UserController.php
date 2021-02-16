@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{ User, Role };
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class UserController extends Controller
 {
@@ -28,7 +31,7 @@ class UserController extends Controller
 
         $users = User::all();
         //var_dump($adminRole).die();
-        return view('admin.user.index', [
+        return view('admin.users.index', [
             'users' => $users
         ]);
     }
@@ -40,18 +43,31 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        $roles = Role::all();
+        return view('admin.users.create', [
+            'roles' => $roles
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $userData = Arr::except($validated, ['roles']);
+        $user = Arr::add($userData, 'password', Hash::make('password'));
+
+        $user = User::create($user);
+        $user->roles()->sync($validated['roles']);
+
+        return view('admin.users.show', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -62,7 +78,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('admin.users.show', [
+            'user' => User::findOrFail($id)
+        ]);
     }
 
     /**
@@ -74,7 +92,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $roles = Role::all();
-        return view('admin.user.edit')->with([
+        return view('admin.users.edit')->with([
             'user' => User::findOrFail($id),
             'roles' => $roles
         ]);
@@ -92,7 +110,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->roles()->sync($request->roles);
 
-        return redirect()->route('admin.user.index');
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -106,7 +124,7 @@ class UserController extends Controller
         $user->roles()->detach();
         $user->delete();
 
-        // return redirect()->route('admin.user.index');
+        // return redirect()->route('admin.users.index');
         return response('OK', 200);
     }
 }
