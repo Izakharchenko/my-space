@@ -124,7 +124,6 @@ class UserController extends Controller
         $user->roles()->detach();
         $user->delete();
 
-        // return redirect()->route('admin.users.index');
-        return response('OK', 200);
+        return redirect()->route('admin.users.index');
     }
 }
