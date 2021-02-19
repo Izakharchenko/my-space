@@ -14,19 +14,25 @@
                         <a class="text-white bg-yellow-500 hover:bg-yellow-700 rounded p-3 mr-2"
                             href="{{ route('admin.users.edit', $user) }}">{{ __('Update') }}
                         </a>
-                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
+                        <form method="POST"
+                            action="{{ route('admin.users.destroy', $user) }}"
+                            class="form-display-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                            class="text-white bg-red-500 hover:bg-red-700 rounded p-3">{{ __('Delete') }}
-                        </button>
+                                aria-label="{{ __('Delete') }}"
+                                title="{{ __('Delete') }}"
+                                class="text-white bg-red-500 hover:bg-red-700 rounded p-3">{{ __('Delete') }}
+                            </button>
                         </form>
-
                     </div>
 
                     <div class="flex">
                         <div class="flex-none">
-                            <img class="h-250 w-250 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="{{ $user->name }}">
+                            <img
+                                class="h-250 w-250 rounded-full"
+                                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60"
+                                alt="{{ $user->name }}">
                         </div>
                         <ul class="flex-grow">
                             <li>Name: {{ $user->name }}</li>

@@ -31433,6 +31433,10 @@ select {
           animation: bounce 1s infinite;
 }
 
+.form-display-inline {
+  display: inline;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
