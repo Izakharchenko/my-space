@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Debugbar;
 
 class UserController extends Controller
 {
@@ -31,6 +33,7 @@ class UserController extends Controller
 
         $users = User::withTrashed()->get();
         //var_dump($adminRole).die();
+        Debugbar::info('test');
         return view('admin.users.index', [
             'users' => $users
         ]);
@@ -76,10 +79,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        DebugBar::info("id {$id}");
+        $user = User::withTrashed()->where('id', $id)->get()->first();
         return view('admin.users.show', [
-            'user' => User::findOrFail($id)
+            'user' => $user
         ]);
     }
 
@@ -92,8 +97,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $roles = Role::all();
+        $user = User::withTrashed()->findOrFail($id);
         return view('admin.users.edit')->with([
-            'user' => User::findOrFail($id),
+            'user' => $user,
             'roles' => $roles
         ]);
     }
@@ -126,12 +132,13 @@ class UserController extends Controller
         return redirect()->route('admin.users.index');
     }
 
-    public function restore(Request $id)
+    public function restore(Request $request, $id)
     {
-        $user = User::withTrashed()->where('id', $id)->get();
-        dd($user);
-        $user->restore();
-
+        try {
+            $user = User::onlyTrashed()->where('id', $id)->restore();
+        } catch (ModelNotFoundException $e) {
+            Debugbar::error("Error!", $e->getMessage());
+        }
         return redirect()->route('admin.users.index');
     }
 }
