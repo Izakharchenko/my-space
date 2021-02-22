@@ -10,21 +10,35 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <div class="py-3 bg-gray-200 mb-6 rounded">
+                    <div class="bg-gray-200 mb-6 rounded">
                         <a class="text-white bg-yellow-500 hover:bg-yellow-700 rounded p-3 mr-2"
                             href="{{ route('admin.users.edit', $user) }}">{{ __('Update') }}
                         </a>
-                        <form method="POST"
-                            action="{{ route('admin.users.destroy', $user) }}"
-                            class="form-display-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                aria-label="{{ __('Delete') }}"
-                                title="{{ __('Delete') }}"
-                                class="text-white bg-red-500 hover:bg-red-700 rounded p-3">{{ __('Delete') }}
-                            </button>
-                        </form>
+                        @if(Auth::id() !== $user->id )
+                            @if(!$user->trashed())
+                                <form method="POST"
+                                    action="{{ route('admin.users.destroy', $user) }}"
+                                    class="form-display-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        aria-label="{{ __('Delete') }}"
+                                        title="{{ __('Delete') }}"
+                                        class="text-white bg-red-500 hover:bg-red-700 rounded p-3">{{ __('Delete') }}
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('admin.users.restore', $user->id) }}"
+                                    method="post" class="form-display-inline">
+                                    @csrf
+                                    @method('POST')
+                                    <button type="submit"
+                                        class="text-white bg-green-500 hover:bg-green-700 rounded p-3"
+                                        >{{ __('Restore') }}
+                                    </button>
+                                </form>
+                            @endif
+                        @endif
                     </div>
 
                     <div class="flex">
