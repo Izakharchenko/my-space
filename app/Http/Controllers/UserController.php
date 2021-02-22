@@ -29,7 +29,7 @@ class UserController extends Controller
         // $admin->save();
         // }
 
-        $users = User::all();
+        $users = User::withTrashed()->get();
         //var_dump($adminRole).die();
         return view('admin.users.index', [
             'users' => $users
@@ -121,8 +121,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->roles()->detach();
         $user->delete();
+
+        return redirect()->route('admin.users.index');
+    }
+
+    public function restore(Request $id)
+    {
+        $user = User::withTrashed()->where('id', $id)->get();
+        dd($user);
+        $user->restore();
 
         return redirect()->route('admin.users.index');
     }
