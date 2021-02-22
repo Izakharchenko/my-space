@@ -76,6 +76,7 @@
                                 href="{{ route('admin.users.show', $user) }}">View</a>
                             <a class="text-indigo-600 hover:text-indigo-900"
                                 href="{{ route('admin.users.edit', $user) }}">Edit</a>
+                            @if(Auth::id() !== $user->id )
                             <form action="{{ route('admin.users.destroy', $user) }}"
                                 method="post" class="form-display-inline">
                                 @csrf
@@ -83,6 +84,7 @@
                                 <button type="submit"
                                     class="text-indigo-600 hover:text-indigo-900 on-delete">Delete</button>
                             </form>
+                            @endif
                         </td>
                         @empty
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
