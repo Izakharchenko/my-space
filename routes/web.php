@@ -22,6 +22,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+    Route::post('/users/restore/{id}', [UserController::class, 'restore'])->name('users.restore');
     Route::resource('users', UserController::class);
 });
 
