@@ -87,22 +87,24 @@
                                 href="{{ route('admin.users.show', $user) }}">View</a>
                             <a class="text-indigo-600 hover:text-indigo-900"
                                 href="{{ route('admin.users.edit', $user) }}">Edit</a>
-                            @if(!$user->trashed())
-                            <form action="{{ route('admin.users.destroy', $user) }}"
-                                method="post" class="form-display-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="text-indigo-600 hover:text-indigo-900 on-delete">Delete</button>
-                            </form>
-                            @else
-                            <form action="{{ route('admin.users.restore', $user->id) }}"
-                                method="post" class="form-display-inline">
-                                @csrf
-                                @method('POST')
-                                <button type="submit"
-                                    class="text-indigo-600 hover:text-indigo-900 on-delete">Restore</button>
-                            </form>
+                            @if(Auth::id() !== $user->id )
+                                @if(!$user->trashed())
+                                <form action="{{ route('admin.users.destroy', $user) }}"
+                                    method="post" class="form-display-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="text-indigo-600 hover:text-indigo-900 on-delete">Delete</button>
+                                </form>
+                                @else
+                                <form action="{{ route('admin.users.restore', $user->id) }}"
+                                    method="post" class="form-display-inline">
+                                    @csrf
+                                    @method('POST')
+                                    <button type="submit"
+                                        class="text-indigo-600 hover:text-indigo-900 on-delete">Restore</button>
+                                </form>
+                                @endif
                             @endif
                         </td>
                         @empty
