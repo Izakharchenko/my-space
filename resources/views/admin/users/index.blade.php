@@ -63,10 +63,21 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex
-                                    text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Active
+                            @if($user->trashed())
+                                <span class="px-2 inline-flex text-xs
+                                    leading-5
+                                    font-semibold
+                                    rounded-full
+                                    bg-red-100 bg-red-100">{{ __('Disabled') }}
+                                </span>
+                            @else
+                            <span class="px-2 inline-flex text-xs
+                                leading-5
+                                font-semibold
+                                rounded-full
+                                bg-green-100 bg-green-100">{{ __('Active') }}
                             </span>
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ implode(', ', $user->roles()->get()->pluck('name')->toArray() ) }}
@@ -76,6 +87,7 @@
                                 href="{{ route('admin.users.show', $user) }}">View</a>
                             <a class="text-indigo-600 hover:text-indigo-900"
                                 href="{{ route('admin.users.edit', $user) }}">Edit</a>
+                            @if(!$user->trashed())
                             <form action="{{ route('admin.users.destroy', $user) }}"
                                 method="post" class="form-display-inline">
                                 @csrf
@@ -83,6 +95,15 @@
                                 <button type="submit"
                                     class="text-indigo-600 hover:text-indigo-900 on-delete">Delete</button>
                             </form>
+                            @else
+                            <form action="{{ route('admin.users.restore', $user->id) }}"
+                                method="post" class="form-display-inline">
+                                @csrf
+                                @method('POST')
+                                <button type="submit"
+                                    class="text-indigo-600 hover:text-indigo-900 on-delete">Restore</button>
+                            </form>
+                            @endif
                         </td>
                         @empty
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
